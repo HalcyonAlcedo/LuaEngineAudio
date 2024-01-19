@@ -202,6 +202,19 @@ int getCurrentPosition(std::string name) {
     return audio->index;
 }
 
+// 获取当前音频大小
+int getAudioSize(std::string name) {
+    // 检查音频列表中是否存在该音频
+    if (audioList.count(name) == 0) {
+        loader::LOG(loader::ERR) << "音频 " << name << " 不存在，无法获取音频大小";
+        return -1;
+    }
+    // 获取音频数据
+    AudioData* audio = &audioList[name];
+    // 返回音频的当前播放位置
+    return audio->size;
+}
+
 // 释放音频资源
 void freeAudio(std::string name) {
     // 检查音频列表中是否存在该音频
@@ -241,6 +254,7 @@ DWORD WINAPI AttachThread(LPVOID lParam) {
                     lua.set_function("seekAudio", seekAudio);
                     lua.set_function("setVolume", setVolume);
                     lua.set_function("getCurrentPosition", getCurrentPosition);
+                    lua.set_function("getAudioSize", getAudioSize);
                     lua.set_function("deleteAudio", freeAudio);
 				}
 			}
